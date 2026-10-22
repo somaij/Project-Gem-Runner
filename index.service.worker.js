@@ -4,7 +4,7 @@
 // Incrementing CACHE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
 /** @type {string} */
-const CACHE_VERSION = '1792457665|8381549';
+const CACHE_VERSION = '1792638290|26652578';
 /** @type {string} */
 const CACHE_PREFIX = '3D Speed Collect-sw-cache-';
 const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
