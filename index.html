@@ -340,9 +340,25 @@ h2 {
 			</div>
 		</div>
 
+		<script>
+// The stutter fix (docs/web/stutter.md). At the end of every frame Emscripten's blitOffscreenFramebuffer asks
+// getParameter(SCISSOR_TEST), which in Chrome waits for the GPU process to finish all queued work: ~3 ms a
+// frame, and 30-80 ms stalls whenever the GPU is busier. isEnabled gives the same answer from state the
+// page keeps itself, without waiting.
+(() => {
+	const SCISSOR_TEST = 0x0C11;
+	for (const Context of [window.WebGL2RenderingContext, window.WebGLRenderingContext]) {
+		if (!Context) continue;
+		const getParameter = Context.prototype.getParameter;
+		Context.prototype.getParameter = function (name) {
+			return name === SCISSOR_TEST ? this.isEnabled(SCISSOR_TEST) : getParameter.call(this, name);
+		};
+	}
+})();
+		</script>
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":5203780,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"serviceWorker":"index.service.worker.js"};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":5324684,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"serviceWorker":"index.service.worker.js"};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
